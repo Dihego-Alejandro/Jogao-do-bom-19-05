@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -8,12 +9,15 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 movement;
     private Rigidbody2D rb;
     private Animator myAnimator;
+    private SpriteRenderer mySpriteRender;
+
 
     private void Awake()
     {
         playerControls = new PlayerControl();
         rb = GetComponent<Rigidbody2D>();
         myAnimator = GetComponent<Animator>();
+        mySpriteRender = GetComponent <SpriteRenderer>();
     }
 
     private void OnEnable()
@@ -23,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        AdJusiPlayerFacingDirecion();
         PlayerInput();
     }
 
@@ -43,6 +48,21 @@ public class PlayerMovement : MonoBehaviour
     private void Move()
     {
         rb.MovePosition(rb.position + movement * (moveSpeed * Time.fixedDeltaTime));
+    }
+
+    private void AdJusiPlayerFacingDirecion()
+    {
+        Vector3 mousePos = Input.mousePosition;
+        Vector3 playerScreenPoint = Camera.main.WorldToScreenPoint(transform.position);
+
+        if (mousePos.x < playerScreenPoint.x)
+        {
+            mySpriteRender.flipX = true;
+        }
+        else
+        {
+            mySpriteRender.flipX = false;
+        }
     }
 
 }
